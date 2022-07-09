@@ -1,0 +1,1 @@
+//一些基础配置和一些扩展配置  https://vitejs.cn/config/ 

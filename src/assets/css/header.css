@@ -1,0 +1,43 @@
+/* #head { overflow: auto  清除浮动}*/
+#header{
+    position: fixed;
+    z-index: 99;
+    height: 100px;
+    top: 0px;
+    padding-top: 1rem;
+    max-width: 1000px;
+    background: rgb(255, 255, 255);
+}
+#head{padding: 0px 10px;}
+#head h1 {
+    font-size: 24px;
+    text-align: left;
+    color: #2196f3;
+    float: left
+}
+
+#head select {
+    float: right;
+    width: 200px;
+    height: 30px;
+    line-height: 30px;
+}
+
+#head::after {
+    content: "";
+    display: block;
+    visibility: hidden;
+    clear: both;
+}
+#nav{width:100%;overflow: hidden;height: 50px;}
+#nav ul{height: 50px;line-height: 50px;border-bottom: 2px #2196f3 solid;animation: lineColor 4s linear 0.5ms infinite normal forwards;}
+#nav li{float: left;padding: 0px 1rem;margin: 0px 1rem;cursor: pointer;}
+#nav a{color:#000}
+#nav a.router-link-active{text-decoration: none;color:#007bff}
+@keyframes  lineColor {
+    from{border-bottom-color: rgb(255, 115, 0);}
+    25%{border-bottom-color: rgb(0, 255, 76);}
+    50%{border-bottom-color: rgb(0, 174, 255);}
+    75%{border-bottom-color: rgb(76, 0, 255);}
+    to{border-bottom-color: rgb(255, 0, 21);}
+}

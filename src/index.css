@@ -1,0 +1,20 @@
+* {
+  margin: 0px;
+  padding: 0px;
+}
+:root {
+  font-size: 14px;
+}
+body {
+  max-width: 1000px; margin: 10px auto;
+}
+
+ul,
+li {
+  list-style: none;
+}
+.p-t-100{padding-top: 100px;}
+.article{padding:100px 10px 0px}
+.bg-tishi{background-color: #ffa722;}
+.hander{cursor: pointer}
+.arc_card{margin-bottom:3rem}

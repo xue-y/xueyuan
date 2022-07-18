@@ -20,7 +20,7 @@ axios.defaults.baseURL="http://casphp.com/api/XueYuan/"
 app.config.globalProperties.$http=axios
 
 // 导入全局注册的滑动组件
-import swiper from './components/swiper.vue'
+//import swiper from './components/swiper.vue'
 /**
  * 调用 app.component() 方法全局注册组件
  * 在进行组件的注册时，定义组件注册名称的方式有两种：
@@ -42,7 +42,7 @@ axios.interceptors.response.use(response => {
   return response
 })
 
-app.component('plugin-swiper',swiper)  // 直接命名
+//app.component('plugin-swiper',swiper)  // 直接命名
 
 // 挂载路由模块
 app.use(router)

@@ -1,10 +1,10 @@
 <template>
-  <router-view></router-view>
+    404 页面
 </template>
 
 <script>
 export default {
-  name:'App',
+    name:'NotFount'
 }
 </script>
 

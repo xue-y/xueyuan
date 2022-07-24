@@ -1,0 +1,3 @@
+      //   { path: 'arc2/:aid', components: { listArcName: Arc2 }, name: 'listArc' }
+     // <!-- <router-view :aId="listAid"  name="listArcName" ></router-view>    -->
+     //    //  this.$router.push(`/list/${this.selectNavId}`)  

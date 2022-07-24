@@ -17,32 +17,21 @@ use think\Exception;
 
 class XueYuan extends Api
 {
-	// 无值的话为当前控制器下所有方法的前置方法
-	protected $beforeActionList = [
-		'valiToken',
-	];
-	// 登录身份验证
-	public function valiToken(){
-		// 判断访问来源
-		// 判断token 是否存在，不存在，自动获取，如果获取失败，非法用户
-	}
-	// 获取token
-	public function getToken(){
-		// 用户名、密码 + 秘钥、算法= token
-		// 服务器上生成token，返回本地用户 uid(单独生成),token ，每次请求数据uid+token 判断是否合法
-	}
 
-    // 获取导航数据
-    public function getYingyuNav(){
+    // 获取导航数据,根据pid获取子级
+    public function getYingyuNavByPid(){
         $nav_table='xueyuan_yingyu_nav';
        try{
            $id=request()->post('pid/d');
+		   $limit=request()->post('limit/d',0);
            if(empty($id)){
-               $data=Db::table($nav_table)->field('id,name,desc')->select();
-
-           }else{
-               $data=Db::table($nav_table)->where('pid',$id)->field('id,name,desc')->select();
+               $this->error('栏目pid参数不得为空');
            }
+		   if($limit>0){
+			   $data=Db::table($nav_table)->where('pid',$id)->field('id,name,desc,pid,type')->limit($limit)->select();
+		   }else{
+			   $data=Db::table($nav_table)->where('pid',$id)->field('id,name,desc,pid,type')->select();
+		   }
            $this->success('',$data,1);
        }catch (Exception $e){
            $this->error($e->getMessage(),[],0);
@@ -56,7 +45,25 @@ class XueYuan extends Api
             $data=Db::table($nav_table)->where('pid',0)->field('id,name,type')->select();
             $this->success('',$data,1);
         }catch (Exception $e){
-            $this->error($e->getMessage(),[],0);
+            $this->error($e->getMessage());
+        }
+    }
+	
+	// 获取栏目pid
+    public function getYingyuNavPid(){
+        try{
+            $nav_table='xueyuan_yingyu_nav';
+			$id=request()->post('nid/d');
+			if(empty($id)){
+				$this->error('栏目nid参数不得为空');
+			}
+            $data=Db::table($nav_table)->where('id',$id)->field('pid,type')->find();
+			if(empty($data)){
+				$this->error('栏目nid参数错误');
+			}
+            $this->success('',$data,1);
+        }catch (Exception $e){
+            $this->error($e->getMessage());
         }
     }
 
@@ -106,10 +113,27 @@ class XueYuan extends Api
 		 $id=request()->post('nid/d'); //xueyuan_yingyu_arc 取得指定版块
 		 $limit=request()->post('limit/d',10);
         if(empty($id)){
-            $this->error('栏目id参数不得为空');
+            $this->error('列表栏目id参数不得为空');
         }
         try{
 			 $data=Db::table($arc_table)->where('nid',$id)->field('id,title')->order('order')->limit($limit)->select();
+			 $this->success('',$data);
+		}catch (Exception $e){
+            $this->error($e->getMessage());
+        }
+	 }
+	 // 获取文章内容
+	 public function getYingyuListArcContent(){
+		 $arc_table='xueyuan_yingyu_arc'; 
+		 $id=request()->post('aid/d'); //xueyuan_yingyu_arc 取得指定版块
+        if(empty($id)){
+            $this->error('列表文章id参数不得为空');
+        }
+        try{
+			 $data=Db::table($arc_table)->where('id',$id)->field('title,con,time')->order('order')->find();
+			 if(empty($data)){
+				  $this->error('当前文章不存在，文章id参数错误');
+			 }
 			 $this->success('',$data);
 		}catch (Exception $e){
             $this->error($e->getMessage());

@@ -1,20 +1,17 @@
 import { createApp } from 'vue'
 import App from './App.vue'
+import axios from 'axios'
 
-import './assets/css/bootstrap.css'
+import './assets/css/bootstrap.min.css'
 import './index.css'
 import './assets/css/header.css'
 
-import axios from 'axios'
-
 // 路由
-import router from './router'
-
+import router from './components/xy1/router'
 
 const app=createApp(App)
 
 // 配置根路径
-//axios.defaults.baseURL="https://www.escook.cn"
 axios.defaults.baseURL="http://casphp.com/api/XueYuan/"
 // 可通过 this 实例访问, axios 挂载在 app 上
 app.config.globalProperties.$http=axios
@@ -29,18 +26,6 @@ app.config.globalProperties.$http=axios
 格按照帕斯卡名称进行使用，又可以转化为短横线名称进行使用
 如果组件导出时命名，可以 name 方式注册 app.component(swiper.name,swiper)
  */
-
-
-// 配置请求拦截器
-axios.interceptors.request.use(config => {
-  // config.headers.Authorization='auth token'   //设置认证后或有跨域问题
-  // 这是固定写法
-  return config
-})
-// 配置响应拦截器
-axios.interceptors.response.use(response => {
-  return response
-})
 
 //app.component('plugin-swiper',swiper)  // 直接命名
 

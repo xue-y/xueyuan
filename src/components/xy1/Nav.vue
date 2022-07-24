@@ -1,8 +1,9 @@
 <template>
     <div id="nav">
+      <transition mode="out-in">
       <ul ref="nav_list">
         <slot name="nav"></slot>
-      </ul>
+      </ul></transition>
     </div>
 </template>
 
@@ -10,15 +11,15 @@
 import  $ from 'jquery.js'
 export default {
     name:'Nav',
-    props:['navList','bodyWidth'],
+    props:['bodyWidth','typeId'],
     data(){
         return {
           isClick:true,// 拖动导航时禁止点击
           ulWidth:0,
-          
+          urlName:''
         }
     },
-    emits:['newNavId'], // 声明自定义事件
+   // emits:['newNavId'], // 声明自定义事件
     //组件在页面中被重新渲染完毕后
     updated(){
          this.setUlwidth()
@@ -36,7 +37,14 @@ export default {
                     $('#nav>ul').css('left',move_x)
                 }
             }
-        }
+        },
+        typeId:{
+            // 切换分类导航，nav left 置为0
+            handler(){
+                $('#nav>ul').css('left',0) 
+            },
+            immediate:true
+        },
     },
     methods:{
     //    switchNav(navId){  // 切换导航
@@ -115,9 +123,10 @@ export default {
 </script>
 <style>
 #nav{width:100%; height: 50px;overflow: hidden; position: relative;border-bottom: 2px #2196f3 solid;animation: lineColor 4s linear 0.5ms infinite normal forwards;font-size: 16px;}
-#nav ul{height: 50px;line-height: 50px;position: relative;left:0px;top:0px;}
+#nav ul{height: 50px;line-height: 50px;position: relative;left:0px;top:0px;animation: opacitySwitch 1s linear}
+/* transition:opacity 1s ease-in;  */
 #nav li{float: left;padding: 0px 1rem;margin: 0px 1rem;cursor: pointer;}
-#nav a{color:#000; display: block;}
+#nav a{color:#000; display: block;text-decoration: none;}
 #nav a.router-link-active{text-decoration: none;color:#007bff;font-weight: 900;}
 @keyframes  lineColor {
     from{border-bottom-color: rgb(255, 115, 0);}
@@ -125,5 +134,27 @@ export default {
     50%{border-bottom-color: rgb(0, 174, 255);}
     75%{border-bottom-color: rgb(76, 0, 255);}
     to{border-bottom-color: rgb(255, 0, 21);}
+}
+@keyframes opacitySwitch {
+    from{opacity:0;}
+    to{opacity:1;}
+}
+.v-enter{
+  opacity:0;
+}
+.v-enter-to{
+  opacity:1;
+}
+.v-enter-active{
+  transition:1s;
+}
+.v-leave{
+  opacity:1;
+}
+.v-leave-to{
+  opacity:0;
+}
+.v-leave-active{
+  transition:1s;
 }
 </style>

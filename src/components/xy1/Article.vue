@@ -2,8 +2,8 @@
 <div class="minNav" v-if="minNavLength >=1 ">
     <MinNav :minNavList="minNavData"  @goPosCard="getPosCard" />
 </div>
-<div class="article">
-   <p v-if="desc!=''" class="desc">{{desc}}</p>
+<div class="article" ref="cardList">
+   <p class="desc">{{desc}}</p>
    <div class="arc_card clearfix" v-for="(item,index) in minNavData" :key="item.id" isData="false"  :id="item.id" :index="index" > 
         <!-- 等待数据加载完成 -->
         <div  v-if="(cardList!= '')  && (cardList[index].contentData!=undefined) && (cardList[index].tixing!=undefined)" >
@@ -40,24 +40,18 @@ export default {
          MinNav,
          Card
     },
-     // 组件创建完成
-    created(){
-    }, 
-    beforeRouteEnter(to,form){
-       
-    },
     mounted(){         
         let w_h=$(window).height()//
-        let head_h=140; // 可视区头部高度 可以动态获取 14+42+80 =136
-        window.onscroll = () => {
-          return (() => {     
+        let head_h=$('#header').outerHeight(true)  // 可视区头部高度 可以动态获取
 
+        window.onscroll = () => {
+          return (() => {  
             // // 页面滚动高度
             let src_top=$(window).scrollTop();
-            this.pageScrollTop=src_top
+     
            // 如果标记元素出现在可视区，开始请求数据
            if(this.cardBut){
-            let _this=this
+                let _this=this
                 $('.arc_card').each(function(i,e){
                
                    if(($(this).attr('isData')==='false') && _this.cardBut)
@@ -72,8 +66,8 @@ export default {
                         // 可视区范围
                         if((diff>=0) && (src_top+head_h<ele_top)){
                             // 开始请求数据
-                            let c_index=$(this).attr('index')
-                            let c_id=$(this).attr('id')
+                            let c_index=parseInt($(this).attr('index'))
+                            let c_id=parseInt($(this).attr('id'))
                             _this.getCardData(c_id,c_index)
                                
                         }else{
@@ -81,7 +75,8 @@ export default {
                         }
                    }
                 })
-           }           
+           }  
+
          })()   
       }
     },
@@ -94,6 +89,7 @@ export default {
                 this.isEmpty=false
                 // 清空原来的数据
                 this.cardList=[] 
+                this.minNavData=[]
                 // 获取当前快捷导航列表
                 this.getCurrenMinNav(this.aId)
               }
@@ -135,6 +131,7 @@ export default {
                 }
                 res.data.contentData['index']=index
                 // 更新为新的数组
+  
                 this.cardList.splice(index,1,res.data);
                 // 标识当前版块数据已经请求过了
                 $('.arc_card').eq(index).attr('isData',true)
@@ -143,14 +140,10 @@ export default {
         },
         // 跳转到指定版块
         getPosCard(id,index){
-
             // 计算滚动距离
             let ele_h=$('.arc_card').eq(index).offset().top
-            let head_h=$('.arc_card').eq(0).offset().top
-            let src_h=Math.ceil(ele_h-head_h)
-            // 滚动上去 desc 这部分
-            let desc_h=$('.desc').outerHeight(true)
-            this.pageScrollTop=src_h+desc_h
+            let head_h=$('#header').outerHeight(true)      
+            this.pageScrollTop=Math.ceil(ele_h-head_h)
 
             let is_data=$('.arc_card').eq(index).attr('isData')
 
@@ -180,12 +173,11 @@ export default {
                     behavior:'smooth'
               })
             }
-        }
-
+        },
     },
 }
 </script>
 <style scoped>
-.arc_card{margin-top:2rem;margin-bottom: 3rem;}
+.arc_card{margin-bottom: 3rem;}
 .desc{font-size:15px;margin-top:1rem}
 </style>
